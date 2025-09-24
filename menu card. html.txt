@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Cuisine - Menu</title>
+    <!-- Optional: Link to Google Fonts for 'Playfair Display' and 'Georgia' for an elegant look -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Georgia&display=swap" rel="stylesheet">
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Georgia', serif; /* A classic, elegant font */
+            margin: 0;
+            padding: 0;
+            background-color: #FDF5E6; /* A warm, light beige/skin tone color */
+            color: #333; /* Dark gray for text */
+            line-height: 1.6; /* Improved readability */
+        }
+
+        /* Container for the menu card */
+        .menu-container {
+            width: 80%; /* Responsive width */
+            max-width: 900px; /* Maximum width for larger screens */
+            margin: 40px auto; /* Center the container with top/bottom margin */
+            background-color: #fff; /* White background for the menu card */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            border-radius: 10px; /* Rounded corners for a modern look */
+            padding: 30px; /* Internal spacing */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Header Styling */
+        .menu-header {
+            text-align: center; /* Center align header text */
+            margin-bottom: 30px; /* Space below header */
+            border-bottom: 2px solid #e0e0e0; /* Separator line */
+            padding-bottom: 20px; /* Space above separator */
+        }
+
+        .menu-header h1 {
+            font-family: 'Playfair Display', serif; /* A more decorative font for the main title */
+            font-size: 3.5em; /* Large font size for impact */
+            color: #5a2d05; /* Dark brown, earthy tone */
+            margin-bottom: 10px; /* Space below title */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+        }
+
+        .menu-header h2 {
+            font-size: 1.5em; /* Subtitle font size */
+            color: #888; /* Lighter gray for subtitle */
+            font-weight: normal; /* Normal font weight */
+            margin-top: 0; /* Remove default top margin */
+        }
+
+        /* Section Styling (e.g., Appetizers, Main Courses) */
+        .menu-section {
+            margin-bottom: 15px; /* Reduced space between menu sections */
+            border: 1px solid #f0f0f0; /* Light border for each section */
+            border-radius: 8px; /* Rounded corners for sections */
+            overflow: hidden; /* Ensures content doesn't spill out on collapse */
+        }
+
+        .menu-section h3 {
+            font-family: 'Playfair Display', serif; /* Consistent decorative font for section titles */
+            font-size: 2em; /* Section title font size */
+            color: #7b4f2c; /* Lighter brown */
+            padding: 15px 20px; /* Padding inside the clickable header */
+            margin: 0; /* Remove default margin */
+            background-color: #fefefe; /* Slightly different background for header */
+            border-bottom: 1px solid #e0e0e0; /* Separator for header */
+            cursor: pointer; /* Indicate it's clickable */
+            display: flex; /* Use flexbox for title and icon */
+            justify-content: space-between; /* Space out title and icon */
+            align-items: center; /* Vertically align title and icon */
+            user-select: none; /* Prevent text selection on click */
+        }
+
+        .menu-section h3:hover {
+            background-color: #f5f5f5; /* Hover effect for clickable header */
+        }
+
+        .toggle-icon {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-left: 10px;
+            transition: transform 0.3s ease; /* Smooth rotation for icon */
+        }
+
+        .menu-section.collapsed .toggle-icon {
+            transform: rotate(-90deg); /* Rotate icon when collapsed */
+        }
+
+        /* Container for food items within a section */
+        .menu-items-container {
+            max-height: 1000px; /* Max height when expanded (arbitrarily large) */
+            overflow: hidden;
+            transition: max-height 0.5s ease-out; /* Smooth transition for expand/collapse */
+            padding: 0 20px; /* Padding for the items */
+        }
+
+        .menu-section.collapsed .menu-items-container {
+            max-height: 0; /* Collapse by setting max-height to 0 */
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        /* Menu Item Styling */
+        .menu-item {
+            display: flex; /* Use flexbox for layout */
+            justify-content: space-between; /* Space out item details and price */
+            align-items: flex-start; /* Align items to the top vertically */
+            padding: 15px 0; /* Vertical padding for each item */
+            border-bottom: 1px dashed #eee; /* Dashed separator between items */
+        }
+
+        .menu-item:last-child {
+            border-bottom: none; /* No border for the last item in a section */
+        }
+
+        .item-details {
+            flex-grow: 1; /* Allows item details to take up available space */
+        }
+
+        .item-name {
+            font-weight: bold; /* Bold name */
+            font-size: 1.2em; /* Larger font for name */
+            color: #444; /* Darker gray for name */
+        }
+
+        .item-description {
+            font-size: 0.9em; /* Smaller font for description */
+            color: #666; /* Medium gray for description */
+            margin-top: 5px; /* Space below name */
+        }
+
+        .item-price {
+            font-weight: bold; /* Bold price */
+            font-size: 1.2em; /* Larger font for price */
+            color: #5a2d05; /* Dark brown for price */
+            margin-left: 20px; /* Space between description and price */
+            white-space: nowrap; /* Prevent price from wrapping to next line */
+            flex-shrink: 0; /* Prevent price from shrinking */
+        }
+
+        /* Footer Styling */
+        .menu-footer {
+            text-align: center; /* Center align footer text */
+            margin-top: 40px; /* Space above footer */
+            padding-top: 20px; /* Space below top border */
+            border-top: 1px solid #e0e0e0; /* Separator line */
+            font-size: 0.9em; /* Smaller font for footer */
+            color: #777; /* Lighter gray for footer */
+        }
+
+        .menu-footer p {
+            margin: 5px 0; /* Small margin for paragraphs in footer */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .menu-container {
+                width: 95%; /* Wider on small screens */
+                margin: 20px auto; /* Less margin on small screens */
+                padding: 20px; /* Less padding on small screens */
+            }
+
+            .menu-header h1 {
+                font-size: 2.5em; /* Smaller title on small screens */
+            }
+
+            .menu-header h2 {
+                font-size: 1.2em; /* Smaller subtitle on small screens */
+            }
+
+            .menu-section h3 {
+                font-size: 1.8em; /* Smaller section titles on small screens */
+            }
+
+            .menu-item {
+                flex-direction: column; /* Stack name/desc, then price on small screens */
+                align-items: center; /* Center items horizontally */
+                text-align: center; /* Center text within items */
+            }
+
+            .item-details {
+                text-align: center; /* Center text details */
+            }
+
+            .item-price {
+                text-align: center; /* Center price */
+                margin-left: 0; /* Remove left margin */
+                margin-top: 10px; /* Add top margin */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-container">
+        <header class="menu-header">
+            <h1>Indian Cuisine</h1>
+            <h2>Restaurant - Authentic Indian Flavors - Rajahmundry</h2>
+        </header>
+
+        <section class="menu-section" id="appetizers-section">
+            <h3>Appetizers 🍴 <span class="toggle-icon">▼</span></h3>
+            <div class="menu-items-container">
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Subzi Quinoa Tikki</div>
+                        <div class="item-description">Crispy vegetable and quinoa patties, served with mint chutney.</div>
+                    </div>
+                    <div class="item-price">₹250</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Paneer Tikka</div>
+                        <div class="item-description">Marinated cottage cheese grilled in tandoor.</div>
+                    </div>
+                    <div class="item-price">₹300</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Mutton Sukha Goli</div>
+                        <div class="item-description">Dry preparation of spiced mutton meatballs.</div>
+                    </div>
+                    <div class="item-price">₹400</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Crispy Corn</div>
+                        <div class="item-description">Fried corn kernels tossed with spices and herbs.</div>
+                    </div>
+                    <div class="item-price">₹220</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Chicken 65</div>
+                        <div class="item-description">Spicy, deep-fried chicken appetizer from Chennai.</div>
+                    </div>
+                    <div class="item-price">₹380</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Gobi Manchurian Dry</div>
+                        <div class="item-description">Crispy cauliflower florets tossed in a spicy, tangy Indo-Chinese sauce.</div>
+                    </div>
+                    <div class="item-price">₹280</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Hara Bhara Kebab</div>
+                        <div class="item-description">Green vegetable patties made with spinach, peas, and potatoes.</div>
+                    </div>
+                    <div class="item-price">₹260</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Fish Amritsari</div>
+                        <div class="item-description">Batter-fried fish marinated with Amritsari spices.</div>
+                    </div>
+                    <div class="item-price">₹420</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="menu-section" id="soups-salads-section">
+            <h3>Soups & Salads 🍲 <span class="toggle-icon">▼</span></h3>
+            <div class="menu-items-container">
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Tomato Shorba</div>
+                        <div class="item-description">A light and flavorful Indian tomato soup, spiced perfectly.</div>
+                    </div>
+                    <div class="item-price">₹180</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Cream of Mushroom Soup</div>
+                        <div class="item-description">Rich and creamy mushroom soup, a comforting classic.</div>
+                    </div>
+                    <div class="item-price">₹200</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Kachumber Salad</div>
+                        <div class="item-description">Fresh diced cucumbers, tomatoes, onions, and cilantro with a tangy dressing.</div>
+                    </div>
+                    <div class="item-price">₹150</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Sweet Corn Soup (Veg/Non-Veg)</div>
+                        <div class="item-description">Classic sweet corn soup, available with vegetables or chicken.</div>
+                    </div>
+                    <div class="item-price">₹190</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Hot & Sour Soup (Veg/Non-Veg)</div>
+                        <div class="item-description">Spicy and tangy soup with vegetables or chicken.</div>
+                    </div>
+                    <div class="item-price">₹190</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Green Salad</div>
+                        <div class="item-description">Simple salad with fresh greens, cucumber, and carrots.</div>
+                    </div>
+                    <div class="item-price">₹120</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Chicken Clear Soup</div>
+                        <div class="item-description">Light and healthy chicken broth with tender chicken pieces.</div>
+                    </div>
+                    <div class="item-price">₹210</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Caesar Salad (Veg/Non-Veg)</div>
+                        <div class="item-description">Crisp romaine lettuce, croutons, Parmesan, and Caesar dressing. Add grilled chicken for non-veg.</div>
+                    </div>
+                    <div class="item-price">₹280</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="menu-section" id="main-courses-section">
+            <h3>Main Courses 🍛 <span class="toggle-icon">▼</span></h3>
+            <div class="menu-items-container">
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Butter Chicken</div>
+                        <div class="item-description">Tender chicken pieces in a rich, creamy tomato gravy.</div>
+                    </div>
+                    <div class="item-price">₹450</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">SALT Special Dal Makhani</div>
+                        <div class="item-description">Slow-cooked black lentils simmered in butter and cream.</div>
+                    </div>
+                    <div class="item-price">₹320</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Alleppey Fish Curry</div>
+                        <div class="item-description">Traditional Kerala style fish curry with coconut milk and raw mango.</div>
+                    </div>
+                    <div class="item-price">₹550</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Ras-Bhari Kofta Curry</div>
+                        <div class="item-description">Vegetable and paneer dumplings in a mild, flavorful gravy.</div>
+                    </div>
+                    <div class="item-price">₹380</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Mutton Chops Curry</div>
+                        <div class="item-description">Succulent mutton chops cooked in a spicy, aromatic curry.</div>
+                    </div>
+                    <div class="item-price">₹600</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Paneer Butter Masala</div>
+                        <div class="item-description">Cottage cheese cubes in a rich, creamy tomato and cashew gravy.</div>
+                    </div>
+                    <div class="item-price">₹350</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Chicken Chettinad</div>
+                        <div class="item-description">A fiery and aromatic chicken curry from the Chettinad region of Tamil Nadu.</div>
+                    </div>
+                    <div class="item-price">₹480</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Vegetable Korma</div>
+                        <div class="item-description">Mixed vegetables cooked in a rich, mild, and creamy cashew-based gravy.</div>
+                    </div>
+                    <div class="item-price">₹300</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="menu-section" id="breads-rice-section">
+            <h3>Breads & Rice 🍚 <span class="toggle-icon">▼</span></h3>
+            <div class="menu-items-container">
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Garlic Naan</div>
+                        <div class="item-description">Leavened flatbreads topped with garlic and butter.</div>
+                    </div>
+                    <div class="item-price">₹80</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Basmati Rice</div>
+                        <div class="item-description">Steamed long-grain basmati rice.</div>
+                    </div>
+                    <div class="item-price">₹120</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Chicken Biryani</div>
+                        <div class="item-description">Fragrant basmati rice cooked with marinated chicken and spices.</div>
+                    </div>
+                    <div class="item-price">₹480</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Butter Naan</div>
+                        <div class="item-description">Soft and fluffy leavened flatbread, brushed with butter.</div>
+                    </div>
+                    <div class="item-price">₹70</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Plain Roti</div>
+                        <div class="item-description">Whole wheat flatbread cooked in a tandoor.</div>
+                    </div>
+                    <div class="item-price">₹50</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Jeera Rice</div>
+                        <div class="item-description">Basmati rice flavored with cumin seeds.</div>
+                    </div>
+                    <div class="item-price">₹150</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Vegetable Pulao</div>
+                        <div class="item-description">Aromatic rice dish cooked with mixed vegetables and mild spices.</div>
+                    </div>
+                    <div class="item-price">₹280</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Hyderabadi Mutton Biryani</div>
+                        <div class="item-description">Classic slow-cooked mutton biryani, rich in flavor.</div>
+                    </div>
+                    <div class="item-price">₹580</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="menu-section" id="desserts-section">
+            <h3>Desserts 🍰 <span class="toggle-icon">▼</span></h3>
+            <div class="menu-items-container">
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Filter Coffee Brulee</div>
+                        <div class="item-description">A unique twist on creme brulee with the essence of South Indian filter coffee.</div>
+                    </div>
+                    <div class="item-price">₹220</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Saffroni Kulfi</div>
+                        <div class="item-description">Traditional Indian frozen dessert flavored with saffron.</div>
+                    </div>
+                    <div class="item-price">₹180</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Ras Malai</div>
+                        <div class="item-description">Soft paneer dumplings soaked in sweetened, thickened milk.</div>
+                    </div>
+                    <div class="item-price">₹200</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Gulab Jamun</div>
+                        <div class="item-description">Deep-fried milk-solids dumplings soaked in rose-flavored sugar syrup.</div>
+                    </div>
+                    <div class="item-price">₹150</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Gajar Halwa</div>
+                        <div class="item-description">Classic Indian carrot pudding, slow-cooked with milk and dry fruits.</div>
+                    </div>
+                    <div class="item-price">₹190</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Chocolate Lava Cake</div>
+                        <div class="item-description">Warm chocolate cake with a molten chocolate center, served with vanilla ice cream.</div>
+                    </div>
+                    <div class="item-price">₹250</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Ice Cream Scoop</div>
+                        <div class="item-description">Choice of Vanilla, Chocolate, or Strawberry.</div>
+                    </div>
+                    <div class="item-price">₹100</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Fruit Custard</div>
+                        <div class="item-description">Creamy custard with a medley of fresh seasonal fruits.</div>
+                    </div>
+                    <div class="item-price">₹170</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="menu-section" id="beverages-section">
+            <h3>Beverages ☕ <span class="toggle-icon">▼</span></h3>
+            <div class="menu-items-container">
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Fresh Lime Soda</div>
+                        <div class="item-description">Refreshing lime juice with soda, sweet or salted.</div>
+                    </div>
+                    <div class="item-price">₹100</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Masala Chai</div>
+                        <div class="item-description">Traditional Indian spiced tea.</div>
+                    </div>
+                    <div class="item-price">₹80</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Mango Lassi</div>
+                        <div class="item-description">Sweet yogurt drink blended with fresh mango pulp.</div>
+                    </div>
+                    <div class="item-price">₹150</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Cold Coffee</div>
+                        <div class="item-description">Chilled coffee blended with milk and sugar.</div>
+                    </div>
+                    <div class="item-price">₹160</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Aerated Drinks</div>
+                        <div class="item-description">Coke, Sprite, Fanta, Thums Up.</div>
+                    </div>
+                    <div class="item-price">₹90</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Mineral Water</div>
+                        <div class="item-description">Bottled purified drinking water.</div>
+                    </div>
+                    <div class="item-price">₹50</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Fresh Orange Juice</div>
+                        <div class="item-description">Freshly squeezed orange juice.</div>
+                    </div>
+                    <div class="item-price">₹180</div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-details">
+                        <div class="item-name">Buttermilk (Chaas)</div>
+                        <div class="item-description">Spiced Indian buttermilk, refreshing and cooling.</div>
+                    </div>
+                    <div class="item-price">₹110</div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="menu-footer">
+            <p>For reservations or inquiries, please contact us.</p>
+            <p>Jawaharlal Nehru Rd, beside Chakravarthi Grand, Model Colony, Venkateswara Nagar, Rajamahendravaram, Andhra Pradesh 533101</p>
+            <p><strong>Phone:</strong> +91 9876543211</p>
+            <p>&copy; 2025 Indian Cuisine. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all menu section headers
+            const sectionHeaders = document.querySelectorAll('.menu-section h3');
+
+            sectionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    // Get the parent section element
+                    const section = this.closest('.menu-section');
+                    // Toggle the 'collapsed' class on the section
+                    section.classList.toggle('collapsed');
+
+                    // Update the toggle icon
+                    const toggleIcon = this.querySelector('.toggle-icon');
+                    if (section.classList.contains('collapsed')) {
+                        toggleIcon.textContent = '▶'; // Right arrow when collapsed
+                    } else {
+                        toggleIcon.textContent = '▼'; // Down arrow when expanded
+                    }
+                });
+            });
+
+            // Initially collapse all sections except the first one (optional)
+            // For now, all are expanded by default as per the user's initial request.
+            // If you want them collapsed by default, add the 'collapsed' class to each <section class="menu-section">
+            // and change the initial toggle-icon to '▶' in the HTML.
+        });
+    </script>
+
+</body>
+</html>
