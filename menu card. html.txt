@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indian Cuisine - Menu</title>
+    <title>Indian Cuisine lazeer </title>
     <!-- Optional: Link to Google Fonts for 'Playfair Display' and 'Georgia' for an elegant look -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Georgia&display=swap" rel="stylesheet">
     <style>
@@ -613,3 +613,4 @@
 
 </body>
 </html>
+
