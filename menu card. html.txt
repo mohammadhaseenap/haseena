@@ -199,7 +199,7 @@
     <div class="menu-container">
         <header class="menu-header">
             <h1>Indian Cuisine</h1>
-            <h2>Restaurant - Authentic Indian Flavors - Rajahmundry</h2>
+            <h2>Restaurant - Authentic Indian Flavors - Rjy</h2>
         </header>
 
         <section class="menu-section" id="appetizers-section">
@@ -613,4 +613,5 @@
 
 </body>
 </html>
+
 
